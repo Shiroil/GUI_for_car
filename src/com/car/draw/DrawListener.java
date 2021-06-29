@@ -111,7 +111,7 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                         positions[j++] = pos;
                     }
                     else {
-                        position pos = new position(i, y_min);
+                        position pos = new position(i, y_max);
                         positions[j++] = pos;
                     }
                     System.out.println("y:"+y_min);
