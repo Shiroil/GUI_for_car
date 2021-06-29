@@ -99,13 +99,22 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                 int count = 0;
                 for(int i = x_min; i < x_max; i++){
                     if(count==step){
-                        y_min++;
+                        if(y1 < y2)
+                            y_min++;
+                        else
+                            y_max--;
                         count=0;
                     }
                     count++;
-                    position pos = new position(i, y_min);
+                    if(y1 < y2) {
+                        position pos = new position(i, y_min);
+                        positions[j++] = pos;
+                    }
+                    else {
+                        position pos = new position(i, y_min);
+                        positions[j++] = pos;
+                    }
                     System.out.println("y:"+y_min);
-                    positions[j++] = pos;
                 }
             }
             if ("矩形".equals(name)) {
@@ -132,19 +141,86 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                     positions[j++] = pos;
                 }
                 shapeArray[index++] = rect;
-                System.out.println("左上:("+ Math.min(x1, x2) + "," +Math.max(y1, y2) + ")");
-                System.out.println("右上:("+ Math.max(x1, x2) + "," +Math.max(y1, y2) + ")");
-                System.out.println("左下:("+ Math.min(x1, x2) + "," +Math.min(y1, y2) + ")");
-                System.out.println("右下:("+ Math.max(x1, x2) + "," +Math.min(y1, y2) + ")");
+                System.out.println("左上:("+ x_min + "," + y_max + ")");
+                System.out.println("右上:("+ x_max + "," + y_max + ")");
+                System.out.println("左下:("+ x_min + "," + y_min + ")");
+                System.out.println("右下:("+ x_max + "," + y_min + ")");
             }
             if ("椭圆".equals(name)) {
                 g.drawOval(Math.min(x1, x2), Math.min(y1, y2), Math.abs(x2 - x1), Math.abs(y2 - y1));
                 Shape oval = new Oval(x1, y1, x2, y2, name, color);
+                int x_min = Math.min(x1, x2);
+                int x_max = Math.max(x1, x2);
+                int y_min = Math.min(y1, y2);
+                int y_max = Math.max(y1, y2);
+                int mid_x = (x1 + x2)/2;
+                int mid_y = (y1 + y2)/2;
+                int[] x_pos = new int[5];
+                int[] y_pos = new int[5];
+                x_pos[0] = x_min;
+                x_pos[1] = (mid_x-x_min)/2+x_min;
+                x_pos[2] = mid_x;
+                x_pos[3] = (x_max-mid_x)/2+mid_x;
+                x_pos[4] = x_max;
+                y_pos[0] = y_min;
+                y_pos[1] = (mid_y-y_min)/2+y_min;
+                y_pos[2] = mid_y;
+                y_pos[3] = (y_max-mid_y)/2+mid_y;
+                y_pos[4] = y_max;
+
+                int[] x_D_value = new int[3];
+                int[] y_D_value = new int[3];
+                x_D_value[0] = x_pos[1] - x_pos[0];
+                y_D_value[0] = y_pos[2] - y_pos[1];
+                int[] step = new int[3];
+                int[] max = new int[3];
+                max[0] = Math.max(x_D_value[0], y_D_value[0]);
+                if(x_D_value[0] > y_D_value[0]){
+                    step[0] = max[0] / y_D_value[0];
+                    step[0] = step[0] > 0 ? step[0] : 1;
+                }
+                else {
+                    step[0] = max[0] / x_D_value[0];
+                    step[0] = step[0] > 0 ? step[0] : 1;
+                }
+                int count1 = 0;
+                int count2 = 0;
+                while(x_min != x_pos[1]){
+                    if(count1==step[0]){
+                        mid_y--;
+                        count1=0;
+                    }
+                    if(count2==step[0]){
+                        x_min++;
+                        count2=0;
+                    }
+                    count1++;
+                    count2++;
+                    position pos = new position(x_min, mid_y);
+                    System.out.println("y:"+y_min);
+                    positions[j++] = pos;
+                }
+
+                while(x_min != x_pos[1]){//明天改这里 第二段
+                    if(count1==step[0]){
+                        mid_y--;
+                        count1=0;
+                    }
+                    if(count2==step[0]){
+                        x_min++;
+                        count2=0;
+                    }
+                    count1++;
+                    count2++;
+                    position pos = new position(x_min, mid_y);
+                    System.out.println("y:"+y_min);
+                    positions[j++] = pos;
+                }
                 shapeArray[index++] = oval;
-                System.out.println("左:("+ Math.min(x1, x2) + "," + (y1 + y2)/2  + ")");
-                System.out.println("上:("+ Math.max(y1, y2) + "," + y1 + ")");
-                System.out.println("右:("+ Math.max(x1, x2) + "," + (y1 + y2)/2 + ")");
-                System.out.println("下:("+ Math.min(y1, y2) + "," + y2 + ")");
+                System.out.println("左:("+ x_min + "," + mid_y  + ")");
+                System.out.println("上:("+ mid_x + "," + y_min + ")");
+                System.out.println("右:("+ x_max + "," + mid_y + ")");
+                System.out.println("下:("+ mid_x + "," + y_max + ")");
             }
 
             if ("多边形".equals(name) && flag1) {
