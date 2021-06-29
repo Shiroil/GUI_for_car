@@ -23,6 +23,7 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
     private position[] positions;
     private int index = 0;
     int k = 0;
+    Timer timer;
 
     // 初始化画笔
     public void setGr(Graphics g) {
@@ -85,18 +86,23 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                 int x_max = Math.max(x1, x2);
                 int y_min = Math.min(y1, y2);
                 int y_max = Math.max(y1, y2);
-                int max = Math.max(x_max-x_min, y_max-y_min);
-                int p = max;
-                int yp = y_max - y_min;
-                int a = max/yp;
-                System.out.println("a:"+a);
-                int b = 0;
+                int x_D_value = x_max - x_min;
+                int y_D_value = y_max - y_min;
+                int step = 0;
+                int max = Math.max(x_D_value, y_D_value);
+                if(x_D_value > y_D_value){
+                    step = max/y_D_value;
+                }
+                else {
+                    step = max / x_D_value;
+                }
+                int count = 0;
                 for(int i = x_min; i < x_max; i++){
-                    if(b==a){
+                    if(count==step){
                         y_min++;
-                        b=0;
+                        count=0;
                     }
-                    b++;
+                    count++;
                     position pos = new position(i, y_min);
                     System.out.println("y:"+y_min);
                     positions[j++] = pos;
@@ -238,6 +244,9 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                 shapeArray[index++] = fillrect;
                 color = Color.black;
                 g.setColor(color);
+                positions = new position[5000];
+                k = 0;
+                timer.stop();
             }
             if ("run".equals(name)){
                 color = Color.white;
@@ -292,7 +301,7 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                             }
                         }
                 };
-                Timer timer = new Timer(10 , task);
+                timer = new Timer(10 , task);
                 timer.start();
             }
 
