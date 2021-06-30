@@ -54,7 +54,7 @@ public class Main extends JPanel {
         jp3.setBackground(Color.LIGHT_GRAY);
 
         // 添加图形按钮
-        String[] shapeArray = { "直线", "矩形", "椭圆", "多边形", "画笔", "橡皮檫", "清屏" ,"run" };
+        String[] shapeArray = { "直线", "矩形", "椭圆", "清屏" ,"run" };
         for (int i = 0; i < shapeArray.length; i++) {
             // 创建图形按钮
             JButton jbu1 = new JButton(shapeArray[i]);

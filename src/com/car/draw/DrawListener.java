@@ -23,6 +23,7 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
     private position[] positions;
     private int index = 0;
     int k = 0;
+    int j = 0;
     Timer timer;
 
     // 初始化画笔
@@ -74,7 +75,7 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
     public void mouseReleased(java.awt.event.MouseEvent e) {
 
         {
-            int j = 0;
+            j = 0;
             x2 = e.getX();
             y2 = e.getY();
             // 绘制直线
@@ -82,40 +83,7 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                 g.drawLine(x1, y1, x2, y2);
                 Shape line = new Line(x1, y1, x2, y2, name, color);
                 shapeArray[index++] = line;
-                int x_min = Math.min(x1, x2);
-                int x_max = Math.max(x1, x2);
-                int y_min = Math.min(y1, y2);
-                int y_max = Math.max(y1, y2);
-                int x_D_value = x_max - x_min;
-                int y_D_value = y_max - y_min;
-                int step = 0;
-                int max = Math.max(x_D_value, y_D_value);
-                if(x_D_value > y_D_value){
-                    step = max/y_D_value;
-                }
-                else {
-                    step = max / x_D_value;
-                }
-                int count = 0;
-                for(int i = x_min; i < x_max; i++){
-                    if(count==step){
-                        if(y1 < y2)
-                            y_min++;
-                        else
-                            y_max--;
-                        count=0;
-                    }
-                    count++;
-                    if(y1 < y2) {
-                        position pos = new position(i, y_min);
-                        positions[j++] = pos;
-                    }
-                    else {
-                        position pos = new position(i, y_max);
-                        positions[j++] = pos;
-                    }
-                    System.out.println("y:"+y_min);
-                }
+                draw_line(x1, x2, y1, y2);
             }
             if ("矩形".equals(name)) {
                 g.drawRect(Math.min(x1, x2), Math.min(y1, y2), Math.abs(x2 - x1), Math.abs(y2 - y1));
@@ -124,21 +92,79 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                 int x_max = Math.max(x1, x2);
                 int y_min = Math.min(y1, y2);
                 int y_max = Math.max(y1, y2);
-                for(int i = x_min; i < x_max; i++){
-                    position pos = new position(i,y_min);
-                    positions[j++] = pos;
+                if(x1 - x2 < 0 && y1 - y2 < 0){
+                    for(int i = x_min; i < x_max; i++){
+                        position pos = new position(i,y_min);
+                        positions[j++] = pos;
+                    }
+                    for(int i = y_min; i < y_max; i++){
+                        position pos = new position(x_max,i);
+                        positions[j++] = pos;
+                    }
+                    for(int i = x_max; i > x_min; i--){
+                        position pos = new position(i,y_max);
+                        positions[j++] = pos;
+                    }
+                    for(int i = y_max; i > y_min; i--){
+                        position pos = new position(x_min,i);
+                        positions[j++] = pos;
+                    }
                 }
-                for(int i = y_min; i < y_max; i++){
-                    position pos = new position(x_max,i);
-                    positions[j++] = pos;
+                if(x2 - x1 < 0 && y1 - y2 < 0){
+
+                    for(int i = x_max; i > x_min; i--){
+                        position pos = new position(i,y_min);
+                        positions[j++] = pos;
+                    }
+                    for(int i = y_min; i < y_max; i++){
+                        position pos = new position(x_min,i);
+                        positions[j++] = pos;
+                    }
+                    for(int i = x_min; i < x_max; i++){
+                        position pos = new position(i,y_max);
+                        positions[j++] = pos;
+                    }
+                    for(int i = y_max; i > y_min; i--){
+                        position pos = new position(x_max,i);
+                        positions[j++] = pos;
+                    }
                 }
-                for(int i = x_max; i > x_min; i--){
-                    position pos = new position(i,y_max);
-                    positions[j++] = pos;
+                if(x1 - x2 < 0 && y2 - y1 < 0){
+                    for(int i = x_min; i < x_max; i++){
+                        position pos = new position(i,y_max);
+                        positions[j++] = pos;
+                    }
+                    for(int i = y_max; i > y_min; i--){
+                        position pos = new position(x_max,i);
+                        positions[j++] = pos;
+                    }
+                    for(int i = x_max; i > x_min; i--){
+                        position pos = new position(i,y_min);
+                        positions[j++] = pos;
+                    }
+                    for(int i = y_min; i < y_max; i++){
+                        position pos = new position(x_min,i);
+                        positions[j++] = pos;
+                    }
                 }
-                for(int i = y_max; i > y_min; i--){
-                    position pos = new position(x_min,i);
-                    positions[j++] = pos;
+                if(x2 - x1 < 0 && y1 - y2 > 0){
+
+                    for(int i = x_max; i > x_min; i--){
+                        position pos = new position(i,y_max);
+                        positions[j++] = pos;
+                    }
+                    for(int i = y_max; i > y_min; i--){
+                        position pos = new position(x_min,i);
+                        positions[j++] = pos;
+                    }
+                    for(int i = x_min; i < x_max; i++){
+                        position pos = new position(i,y_min);
+                        positions[j++] = pos;
+                    }
+                    for(int i = y_min; i < y_max; i++){
+                        position pos = new position(x_max,i);
+                        positions[j++] = pos;
+                    }
                 }
                 shapeArray[index++] = rect;
                 System.out.println("左上:("+ x_min + "," + y_max + ")");
@@ -158,6 +184,10 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                 int[] x_pos = new int[5];
                 int[] y_pos = new int[5];
                 x_pos[0] = x_min;
+                int angle = 45;
+                double radian = angle*(Math.PI/180);
+                System.out.println("cos"+Math.cos(radian));
+                System.out.println(Math.cos(45));
                 x_pos[1] = (mid_x-x_min)/2+x_min;
                 x_pos[2] = mid_x;
                 x_pos[3] = (x_max-mid_x)/2+mid_x;
@@ -167,55 +197,54 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                 y_pos[2] = mid_y;
                 y_pos[3] = (y_max-mid_y)/2+mid_y;
                 y_pos[4] = y_max;
+                for (int x_po : x_pos) {
+                    System.out.println(x_po);
+                }
+                for (int y_po : y_pos) {
+                    System.out.println(y_po);
+                }
+                int[] values = new int[2];
+                values = draw_line(x_pos[0], x_pos[1], y_pos[2], y_pos[1]);
+//                System.out.println("return"+x_pos[1]);
+                values = draw_line(values[0], x_pos[2], values[1], y_pos[0]);
+                values = draw_line(values[0], x_pos[3], values[1], y_pos[1]);
+                values = draw_line(values[0], x_pos[4], values[1], y_pos[2]);
+                values = draw_line(values[0], x_pos[3], values[1], y_pos[3]);
+                values = draw_line(values[0], x_pos[2], values[1], y_pos[4]);
+                values = draw_line(values[0], x_pos[1], values[1], y_pos[3]);
+                values = draw_line(values[0], x_pos[0], values[1], y_pos[2]);
 
-                int[] x_D_value = new int[3];
-                int[] y_D_value = new int[3];
-                x_D_value[0] = x_pos[1] - x_pos[0];
-                y_D_value[0] = y_pos[2] - y_pos[1];
-                int[] step = new int[3];
-                int[] max = new int[3];
-                max[0] = Math.max(x_D_value[0], y_D_value[0]);
-                if(x_D_value[0] > y_D_value[0]){
-                    step[0] = max[0] / y_D_value[0];
-                    step[0] = step[0] > 0 ? step[0] : 1;
-                }
-                else {
-                    step[0] = max[0] / x_D_value[0];
-                    step[0] = step[0] > 0 ? step[0] : 1;
-                }
-                int count1 = 0;
-                int count2 = 0;
-                while(x_min != x_pos[1]){
-                    if(count1==step[0]){
-                        mid_y--;
-                        count1=0;
-                    }
-                    if(count2==step[0]){
-                        x_min++;
-                        count2=0;
-                    }
-                    count1++;
-                    count2++;
-                    position pos = new position(x_min, mid_y);
-                    System.out.println("y:"+y_min);
-                    positions[j++] = pos;
-                }
-
-                while(x_min != x_pos[1]){//明天改这里 第二段
-                    if(count1==step[0]){
-                        mid_y--;
-                        count1=0;
-                    }
-                    if(count2==step[0]){
-                        x_min++;
-                        count2=0;
-                    }
-                    count1++;
-                    count2++;
-                    position pos = new position(x_min, mid_y);
-                    System.out.println("y:"+y_min);
-                    positions[j++] = pos;
-                }
+//                while(x_min != x_pos[1]){
+//                    if(count1==step[0]){
+//                        y_temp--;
+//                        count1=0;
+//                    }
+//                    if(count2==step[0]){
+//                        x_min++;
+//                        count2=0;
+//                    }
+//                    count1++;
+//                    count2++;
+//                    position pos = new position(x_min, y_temp);
+//                    System.out.println("y:"+y_min);
+//                    positions[j++] = pos;
+//                }
+//                count1 = 0;
+//                count2 = 0;
+//                while(x_min != x_pos[2]){//明天改这里 第二段
+//                    if(count1==step[1]){
+//                        y_temp--;
+//                        count1=0;
+//                    }
+//                    if(count2==step[1]){
+//                        x_min++;
+//                        count2=0;
+//                    }
+//                    count1++;
+//                    count2++;
+//                    position pos = new position(x_min, y_temp);
+//                    positions[j++] = pos;
+//                }
                 shapeArray[index++] = oval;
                 System.out.println("左:("+ x_min + "," + mid_y  + ")");
                 System.out.println("上:("+ mid_x + "," + y_min + ")");
@@ -366,7 +395,6 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                             if(i!=null){
                                 ((Graphics2D) g).setStroke(new BasicStroke(20));
                                 g.drawLine(x1, y1, x1, y1);
-                                System.out.println("sanb1");
                                 color = Color.black;
                                 g.setColor(color);
                                 ((Graphics2D) g).setStroke(new BasicStroke(1));
@@ -398,5 +426,117 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
         if ("".equals(e.getActionCommand()) && flag2) {
             flag1 = false;
         }
+    }
+    public int[] draw_line(int x1, int x2, int y1, int y2){
+        int x_min = Math.min(x1, x2);
+        int x_max = Math.max(x1, x2);
+        int y_min = Math.min(y1, y2);
+        int y_max = Math.max(y1, y2);
+        int x_D_value = x_max - x_min;
+        int y_D_value = y_max - y_min;
+        int x_if_minus = 0;
+        int y_if_minus = 0;//坐标1-坐标2 负为0 正为1
+        if(x1 - x2 > 0)
+            x_if_minus = 0;
+        else
+            x_if_minus = 1;
+        if(y1 - y2 > 0){
+            y_if_minus = 0;
+        }
+        else
+            y_if_minus = 1;
+        int step = 0;
+        int jud = 0;//判定45° 为1时接近Y轴 为0时接近X轴
+        int max = Math.max(x_D_value, y_D_value);
+        if(x_D_value > y_D_value){
+            step = max/ y_D_value;
+            jud = 0;
+        }
+        else {
+            step = max / x_D_value;
+            jud = 1;
+        }
+        int count = 0;
+        if(jud == 0 && x_if_minus == 1) {
+            for (int i = x_min; i < x_max; i++) {
+                if (count == step) {
+                    if (y1 < y2)
+                        y_min++;
+                    else
+                        y_max--;
+                    count = 0;
+                }
+                count++;
+                if (y1 < y2) {
+                    position pos = new position(i, y_min);
+                    positions[j++] = pos;
+                } else {
+                    position pos = new position(i, y_max);
+                    positions[j++] = pos;
+                }
+            }
+        }
+        if(jud == 0 && x_if_minus == 0) {
+            for (int i = x_max; i > x_min; i--) {
+                if (count == step) {
+                    if (y1 < y2)
+                        y_min++;
+                    else
+                        y_max--;
+                    count = 0;
+                }
+                count++;
+                if (y1 < y2) {
+                    position pos = new position(i, y_min);
+                    positions[j++] = pos;
+                } else {
+                    position pos = new position(i, y_max);
+                    positions[j++] = pos;
+                }
+            }
+        }
+        if(jud == 1 && y_if_minus == 0)
+            for(int i = y_max; i > y_min; i--){
+                if(count==step){
+                    if(x1 < x2)
+                        x_min++;
+                    else
+                        x_max--;
+                    count=0;
+                }
+                count++;
+                if(x1 < x2) {
+                    position pos = new position(x_min, i);
+                    positions[j++] = pos;
+                }
+                else {
+                    position pos = new position(x_max, i);
+                    positions[j++] = pos;
+                }
+            }
+        if(jud == 1 && y_if_minus == 1)
+            for(int i = y_min; i < y_max; i++){
+                if(count==step){
+                    if(x1 < x2)
+                        x_min++;
+                    else
+                        x_max--;
+                    count=0;
+                }
+                count++;
+                if(x1 < x2) {
+                    position pos = new position(x_min, i);
+                    positions[j++] = pos;
+                }
+                else {
+                    position pos = new position(x_max, i);
+                    positions[j++] = pos;
+                }
+            }
+        int[] return_values = new int[2];
+        return_values[0] = positions[j-1].getX1();
+        return_values[1] = positions[j-1].getY1();
+
+        return return_values;
     }
 }
