@@ -186,22 +186,20 @@ public class DrawListener implements MouseListener, MouseMotionListener, ActionL
                 x_pos[0] = x_min;
                 int angle = 45;
                 double radian = angle*(Math.PI/180);
-                System.out.println("cos"+Math.cos(radian));
-                System.out.println(Math.cos(45));
-                x_pos[1] = (mid_x-x_min)/2+x_min;
                 x_pos[2] = mid_x;
-                x_pos[3] = (x_max-mid_x)/2+mid_x;
+                x_pos[3] = (int) (Math.cos(45) * (mid_x-x_min)) + mid_x;
+                x_pos[1] = x_pos[3] - mid_x + x_min;
                 x_pos[4] = x_max;
                 y_pos[0] = y_min;
-                y_pos[1] = (mid_y-y_min)/2+y_min;
+                y_pos[1] = (int) (Math.sin(-45) * (mid_y-y_min)) + mid_y;
                 y_pos[2] = mid_y;
-                y_pos[3] = (y_max-mid_y)/2+mid_y;
+                y_pos[3] = (int) (Math.sin(45) * (mid_y-y_min)) + mid_y;
                 y_pos[4] = y_max;
                 for (int x_po : x_pos) {
-                    System.out.println(x_po);
+                    System.out.println("X:"+x_po);
                 }
                 for (int y_po : y_pos) {
-                    System.out.println(y_po);
+                    System.out.println("Y:"+y_po);
                 }
                 int[] values = new int[2];
                 values = draw_line(x_pos[0], x_pos[1], y_pos[2], y_pos[1]);
