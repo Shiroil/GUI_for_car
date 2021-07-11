@@ -11,10 +11,11 @@ public class Main extends JPanel {
     private static final long serialVersionUID = 1L;
     private Shape[] shapeParameter = new Shape[20000];
     private position[] positions = new position[5000];
+    private position[] red = new position[5000];
     public void initUI() {
 
         // 新建窗体并命名
-        JFrame jf = new JFrame("画板");
+        JFrame jf = new JFrame("路线图");
         // 设置窗体大小
         jf.setSize(1100, 700);
         // 窗体设置居中
@@ -54,7 +55,7 @@ public class Main extends JPanel {
         jp3.setBackground(Color.LIGHT_GRAY);
 
         // 添加图形按钮
-        String[] shapeArray = { "直线", "矩形", "椭圆", "清屏" ,"run" };
+        String[] shapeArray = { "直线", "矩形", "椭圆", "函数1", "函数2", "清屏" , "run" };
         for (int i = 0; i < shapeArray.length; i++) {
             // 创建图形按钮
             JButton jbu1 = new JButton(shapeArray[i]);
@@ -75,6 +76,7 @@ public class Main extends JPanel {
         dl.setGr(g);
         // 将图形数组传递过去
         dl.setSp(shapeParameter);
+        dl.setRed(red);
         dl.setPo(positions);
     }
 
